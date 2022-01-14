@@ -16,12 +16,20 @@
           <div id="unity-progress-bar-full"></div>
         </div>
       </div>
+      <div id="unity-warning"> </div>
+      <div id="unity-footer">
+        <div id="unity-webgl-logo"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">BallCrusher</div>
+      </div>
     </div>
     <script>
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
       var loadingBar = document.querySelector("#unity-loading-bar");
       var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var warningBanner = document.querySelector("#unity-warning");
 
       // Shows a temporary message banner/ribbon for a few seconds, or
       // a permanent error message on top of the canvas if type=='error'.
@@ -29,9 +37,9 @@
       // Modify or remove this function to customize the visually presented
       // way that non-critical warnings and error messages are presented to the
       // user.
-      /*function unityShowBanner(msg, type) {
+      function unityShowBanner(msg, type) {
         function updateBannerVisibility() {
-          //warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
         }
         var div = document.createElement('div');
         div.innerHTML = msg;
@@ -40,12 +48,12 @@
         else {
           if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
           setTimeout(function() {
-            //warningBanner.removeChild(div);
+            warningBanner.removeChild(div);
             updateBannerVisibility();
           }, 5000);
         }
         updateBannerVisibility();
-      }*/
+      }
 
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/1111.loader.js";
@@ -57,7 +65,7 @@
         companyName: "TanatCom",
         productName: "BallCrusher",
         productVersion: "1.1",
-        //showBanner: unityShowBanner,
+        showBanner: unityShowBanner,
       };
 
       // By default Unity keeps WebGL canvas render target size matched with
@@ -67,9 +75,16 @@
       // the canvas DOM size and WebGL render target sizes yourself.
       // config.matchWebGLToCanvasSize = false;
 
-      
-        canvas.style.width = "100vw";
-        canvas.style.height = "95vh";
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        container.className = "unity-mobile";
+        // Avoid draining fillrate performance on mobile devices,
+        // and default/override low DPI mode on mobile browsers.
+        config.devicePixelRatio = 1;
+        unityShowBanner('WebGL builds are not supported on mobile devices.');
+      } else {
+        canvas.style.width = "480px";
+        canvas.style.height = "960px";
+      }
       loadingBar.style.display = "block";
 
       var script = document.createElement("script");
@@ -81,9 +96,6 @@
         }).then((unityInstance) => {
           unityI = unityInstance;
           loadingBar.style.display = "none";
-          fullscreenButton.onclick = () => {
-            unityInstance.SetFullscreen(1);
-          };
         }).catch((message) => {
           alert(message);
         });
