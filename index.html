@@ -105,7 +105,10 @@
       vkBridge.send('VKWebAppInit');
 
 
-
+      function share(){
+        bridge.send("VKWebAppShowWallPostBox", {"message": "Смотри какая класная игра!","attachments": "https://vk.com/app8050360"
+      }); 
+      }
       function auth(){
         vkBridge.send('VKWebAppGetUserInfo').then(_info =>{
           console.log(_info);
