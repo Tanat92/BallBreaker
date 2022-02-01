@@ -97,5 +97,50 @@
       };
       document.body.appendChild(script);
     </script>
+  <script type="text/javascript" src="//api.ok.ru/js/fapi5.js" defer="defer"></script>
+  <script type="text/javascript">
+      var rParams = FAPI.Util.getRequestParameters();
+      FAPI.init(rParams["api_server"], rParams["apiconnection"],
+          /*
+          * Первый параметр:
+          * функция, которая будет вызвана после успешной инициализации.
+          */
+          function() {
+              console.log("Инициализация прошла успешно");
+              // здесь можно вызывать методы API
+          },
+          /*
+          * Второй параметр:
+          * функция, которая будет вызвана, если инициализация не удалась.
+          */
+          function(error) {
+              console.log("Ошибка инициализации");
+          }
+      );
+      function share(){
+        function showInvite() {
+    FAPI.UI.showInvite("Поиграй в мою игру!", "arg1=val1");
+    // в случае успеха возвращает в API_callback третьим параметром строку, в которой через запятую указаны id приглашенных друзей
+}
+      }
+      function auth(){
+      }
+
+      function getUserData(){
+      
+      }
+
+      function setUserData(data){
+      }
+
+      function showFullscrenAd(){
+        FAPI.UI.showAd();
+      }
+      
+      function showRewardedAd(){
+      }
+
+
+    </script>
   </body>
 </html>
